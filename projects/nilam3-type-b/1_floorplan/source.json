@@ -1,0 +1,53 @@
+{
+ "schema": "source/1",
+ "sources": [
+  {
+   "url": "https://nuprop-production.s3.ap-southeast-1.amazonaws.com/55e6afad390b661ede1af703d9b2c9bc.jpg",
+   "kind": "image",
+   "files": [
+    "source/55e6afad390b661ede1af703d9b2c9bc.jpg"
+   ],
+   "note": "image from nuprop.my Precint Lumina page (Taman Daiman Jaya, Kota Tinggi)",
+   "fetched_at": "2026-10-19T12:35:14"
+  },
+  {
+   "url": "https://www.johorprojects.com/wp-content/uploads/2025/05/TamanDaimanJaya3.jpg",
+   "kind": "image",
+   "files": [
+    "source/tamandaimanjaya3.jpg"
+   ],
+   "note": "johorprojects.com Taman Daiman Jaya Precinct Nilam 3 - Floor Plan section, 2-storey cluster homes Type B & B1, 35x68 ft, 2387 sqft",
+   "fetched_at": "2026-10-19T12:36:01"
+  },
+  {
+   "url": "https://www.johorprojects.com/wp-content/uploads/2025/05/TamanDaimanJaya2.jpg",
+   "kind": "image",
+   "files": [
+    "source/tamandaimanjaya2.jpg"
+   ],
+   "note": "johorprojects.com Precinct Nilam 3 page, image 2",
+   "fetched_at": "2026-10-19T12:36:14"
+  },
+  {
+   "url": "https://www.johorprojects.com/wp-content/uploads/2025/05/TamanDaimanJaya4.jpg",
+   "kind": "image",
+   "files": [
+    "source/tamandaimanjaya4.jpg"
+   ],
+   "note": "johorprojects.com Precinct Nilam 3 page, image 4",
+   "fetched_at": "2026-10-19T12:36:14"
+  }
+ ],
+ "declared_dims": {
+  "width_m": 7.5,
+  "depth_m": 20.726,
+  "note": "Type B/B1 per-unit width 7,500 mm; ground depth 14,100 house + 6,626 car porch = 20,726 mm (first floor 16,950 incl. 2,850 balcony). Read off the plan, unit still to be confirmed."
+ },
+ "project": "Taman Daiman Jaya, Kota Tinggi, Johor (Daiman Development Berhad)",
+ "file_notes": {
+  "tamandaimanjaya2.jpg": "FLOORPLAN: 2-storey cluster homes Type B & B1, 35x68 ft, 2,387 sqft, ground + first floor, mm dims (1200x815)",
+  "tamandaimanjaya3.jpg": "site plan of Precinct Nilam 3 (north arrow bottom: north is up), not a unit plan",
+  "tamandaimanjaya4.jpg": "aerial photo, not a plan",
+  "55e6afad390b661ede1af703d9b2c9bc.jpg": "site plan of Precinct Lumina (Type A/B 24x70, C/D 24x90), compass present, not a unit plan"
+ }
+}

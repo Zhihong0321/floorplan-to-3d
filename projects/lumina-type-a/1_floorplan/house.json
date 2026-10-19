@@ -1,0 +1,967 @@
+{
+ "schema": "house/1",
+ "name": "Precinct Lumina Type A - 24x70 double-storey terrace (intermediate unit), Taman Daiman Jaya, Kota Tinggi",
+ "_source": "daiman.com.my Lumina-Web-Brochure-Compressed.pdf page 5 (Type A, 24'x70', 1,870 sqft). LEFT unit of the pair, measured at ~21.2 px/m (ground) / ~21.35 px/m (first), origin = rear-left corner of the plot, x to the right, y towards the street (car porch at the bottom of the plan). Plan dims: 7,315 mm unit width, 21,336 mm plot depth, 8,136 mm car-porch/driveway.",
+ "_assumptions": [
+  "ROOF DELIBERATELY NOT MODELLED. The roof profile and panel placement come from the external Google Open Buildings / Solar API app and are combined later. The brochure only says 'Metal Roofing / R.C. Flat Roof' (render shows parapet fronts), so there was nothing reliable to read anyway.",
+  "Storey heights not given: ground 3.3 m (slab to slab), first 3.0 m. Building top (wall top) 6.3 m. Not from the brochure - replace with the Open Buildings height when combining.",
+  "North not shown on the unit plan. Assumed plan-up (rear of the house) = north, so the front/car porch faces south. The Lumina site plan has a compass but the unit's orientation on it is unknown. Confirm.",
+  "Wall thickness assumed 150 mm exterior / 100 mm interior; fences 120 mm. Positions +-10 cm (brochure image is ~5 cm/pixel).",
+  "Modelled the intermediate (left) unit of the pair; the right-hand unit is the end/corner version with side land, patio and rear baths.",
+  "Boundary fences (rear 1.8 m, front 1.2 m with a 4.1 m gate) are modelled only so the plot outline matches the printed 21,336 mm depth; heights assumed (spec: brick fencing + m.s. gate).",
+  "First floor overhangs the car porch by ~1.1 m (master bedroom front at y=14.39 vs ground front wall at y=13.3), as drawn."
+ ],
+ "north_deg": 0,
+ "levels": [
+  {
+   "name": "Ground",
+   "elevation": 0.0,
+   "height": 3.3,
+   "walls": [
+    {
+     "id": "gF1",
+     "p1": [
+      0,
+      0
+     ],
+     "p2": [
+      7.315,
+      0
+     ],
+     "t": 0.12,
+     "ext": true,
+     "h": 1.8
+    },
+    {
+     "id": "gF2",
+     "p1": [
+      0,
+      21.336
+     ],
+     "p2": [
+      7.315,
+      21.336
+     ],
+     "t": 0.12,
+     "ext": true,
+     "h": 1.2
+    },
+    {
+     "id": "g1",
+     "p1": [
+      0,
+      3.4
+     ],
+     "p2": [
+      0,
+      13.3
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "g2",
+     "p1": [
+      7.315,
+      3.4
+     ],
+     "p2": [
+      7.315,
+      13.3
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "g2b",
+     "p1": [
+      7.315,
+      13.3
+     ],
+     "p2": [
+      7.315,
+      21.336
+     ],
+     "t": 0.12,
+     "ext": true,
+     "h": 1.0
+    },
+    {
+     "id": "g3",
+     "p1": [
+      0,
+      3.4
+     ],
+     "p2": [
+      4.04,
+      3.4
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "g4",
+     "p1": [
+      4.04,
+      4.0
+     ],
+     "p2": [
+      7.315,
+      4.0
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "g5",
+     "p1": [
+      4.04,
+      3.4
+     ],
+     "p2": [
+      4.04,
+      7.17
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "g6",
+     "p1": [
+      2.4,
+      3.4
+     ],
+     "p2": [
+      2.4,
+      6.23
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "g7",
+     "p1": [
+      2.4,
+      6.23
+     ],
+     "p2": [
+      4.04,
+      6.23
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "g8",
+     "p1": [
+      4.04,
+      7.17
+     ],
+     "p2": [
+      7.315,
+      7.17
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "g9",
+     "p1": [
+      4.75,
+      8.58
+     ],
+     "p2": [
+      4.75,
+      9.72
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "g10",
+     "p1": [
+      4.75,
+      9.72
+     ],
+     "p2": [
+      7.315,
+      9.72
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "g11",
+     "p1": [
+      0,
+      13.3
+     ],
+     "p2": [
+      7.315,
+      13.3
+     ],
+     "t": 0.15,
+     "ext": true
+    }
+   ],
+   "openings": [
+    {
+     "wall": "g3",
+     "type": "door",
+     "at": 1.25,
+     "w": 0.9
+    },
+    {
+     "wall": "g7",
+     "type": "door",
+     "at": 1.07,
+     "w": 0.8
+    },
+    {
+     "wall": "g8",
+     "type": "door",
+     "at": 0.46,
+     "w": 0.8
+    },
+    {
+     "wall": "g9",
+     "type": "door",
+     "at": 0.52,
+     "w": 0.7
+    },
+    {
+     "wall": "g11",
+     "type": "window",
+     "at": 1.7,
+     "w": 2.6,
+     "sill": 0.2,
+     "h": 2.2
+    },
+    {
+     "wall": "g11",
+     "type": "door",
+     "at": 6.0,
+     "w": 1.0
+    },
+    {
+     "wall": "gF2",
+     "type": "opening",
+     "at": 4.45,
+     "w": 4.1
+    }
+   ],
+   "rooms": [
+    {
+     "name": "Kitchen",
+     "poly": [
+      [
+       0,
+       3.4
+      ],
+      [
+       2.4,
+       3.4
+      ],
+      [
+       2.4,
+       6.23
+      ],
+      [
+       0,
+       6.23
+      ]
+     ]
+    },
+    {
+     "name": "Bath 3",
+     "poly": [
+      [
+       2.4,
+       3.4
+      ],
+      [
+       4.04,
+       3.4
+      ],
+      [
+       4.04,
+       6.23
+      ],
+      [
+       2.4,
+       6.23
+      ]
+     ]
+    },
+    {
+     "name": "Bedroom 4",
+     "poly": [
+      [
+       4.04,
+       4.0
+      ],
+      [
+       7.315,
+       4.0
+      ],
+      [
+       7.315,
+       7.17
+      ],
+      [
+       4.04,
+       7.17
+      ]
+     ]
+    },
+    {
+     "name": "Dining",
+     "poly": [
+      [
+       0,
+       6.23
+      ],
+      [
+       4.04,
+       6.23
+      ],
+      [
+       4.04,
+       7.17
+      ],
+      [
+       3.4,
+       7.17
+      ],
+      [
+       3.4,
+       8.58
+      ],
+      [
+       4.75,
+       8.58
+      ],
+      [
+       4.75,
+       9.72
+      ],
+      [
+       0,
+       9.72
+      ]
+     ]
+    },
+    {
+     "name": "Stair",
+     "poly": [
+      [
+       3.4,
+       7.17
+      ],
+      [
+       7.315,
+       7.17
+      ],
+      [
+       7.315,
+       8.58
+      ],
+      [
+       3.4,
+       8.58
+      ]
+     ]
+    },
+    {
+     "name": "Closet",
+     "poly": [
+      [
+       4.75,
+       8.58
+      ],
+      [
+       7.315,
+       8.58
+      ],
+      [
+       7.315,
+       9.72
+      ],
+      [
+       4.75,
+       9.72
+      ]
+     ]
+    },
+    {
+     "name": "Living",
+     "poly": [
+      [
+       0,
+       9.72
+      ],
+      [
+       4.75,
+       9.72
+      ],
+      [
+       4.75,
+       13.3
+      ],
+      [
+       0,
+       13.3
+      ]
+     ]
+    },
+    {
+     "name": "Foyer",
+     "poly": [
+      [
+       4.75,
+       9.72
+      ],
+      [
+       7.315,
+       9.72
+      ],
+      [
+       7.315,
+       13.3
+      ],
+      [
+       4.75,
+       13.3
+      ]
+     ]
+    },
+    {
+     "name": "Car porch",
+     "poly": [
+      [
+       0,
+       13.3
+      ],
+      [
+       7.315,
+       13.3
+      ],
+      [
+       7.315,
+       21.336
+      ],
+      [
+       0,
+       21.336
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "First",
+   "elevation": 3.3,
+   "height": 3.0,
+   "walls": [
+    {
+     "id": "f1",
+     "p1": [
+      0,
+      5.0
+     ],
+     "p2": [
+      0,
+      12.2
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "f2",
+     "p1": [
+      7.315,
+      3.98
+     ],
+     "p2": [
+      7.315,
+      14.39
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "f3",
+     "p1": [
+      0,
+      5.0
+     ],
+     "p2": [
+      1.46,
+      5.0
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "f4",
+     "p1": [
+      1.46,
+      3.34
+     ],
+     "p2": [
+      1.46,
+      5.91
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "f5",
+     "p1": [
+      1.46,
+      3.34
+     ],
+     "p2": [
+      3.0,
+      3.34
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "f6",
+     "p1": [
+      3.0,
+      3.34
+     ],
+     "p2": [
+      3.0,
+      9.65
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "f7",
+     "p1": [
+      3.0,
+      3.98
+     ],
+     "p2": [
+      7.315,
+      3.98
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "f8",
+     "p1": [
+      1.46,
+      5.91
+     ],
+     "p2": [
+      3.0,
+      5.91
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "f11",
+     "p1": [
+      4.1,
+      7.15
+     ],
+     "p2": [
+      4.1,
+      9.65
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "f12",
+     "p1": [
+      4.1,
+      7.15
+     ],
+     "p2": [
+      7.315,
+      7.15
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "f13",
+     "p1": [
+      0,
+      9.65
+     ],
+     "p2": [
+      7.315,
+      9.65
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "f14",
+     "p1": [
+      1.23,
+      12.2
+     ],
+     "p2": [
+      1.23,
+      15.1
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "f15",
+     "p1": [
+      1.23,
+      12.2
+     ],
+     "p2": [
+      3.0,
+      12.2
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "f16",
+     "p1": [
+      3.0,
+      12.2
+     ],
+     "p2": [
+      3.0,
+      15.1
+     ],
+     "t": 0.1,
+     "ext": false
+    },
+    {
+     "id": "f17",
+     "p1": [
+      1.23,
+      15.1
+     ],
+     "p2": [
+      3.0,
+      15.1
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "f18",
+     "p1": [
+      3.0,
+      14.39
+     ],
+     "p2": [
+      7.315,
+      14.39
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "f19",
+     "p1": [
+      0,
+      12.2
+     ],
+     "p2": [
+      1.23,
+      12.2
+     ],
+     "t": 0.15,
+     "ext": true
+    },
+    {
+     "id": "f20",
+     "p1": [
+      0,
+      16.5
+     ],
+     "p2": [
+      7.315,
+      16.5
+     ],
+     "t": 0.12,
+     "ext": true,
+     "h": 0.9
+    }
+   ],
+   "openings": [
+    {
+     "wall": "f7",
+     "type": "window",
+     "at": 2.4,
+     "w": 2.6,
+     "sill": 0.9,
+     "h": 1.2
+    },
+    {
+     "wall": "f6",
+     "type": "door",
+     "at": 2.11,
+     "w": 0.8
+    },
+    {
+     "wall": "f6",
+     "type": "door",
+     "at": 5.71,
+     "w": 0.8
+    },
+    {
+     "wall": "f8",
+     "type": "door",
+     "at": 0.94,
+     "w": 0.8
+    },
+    {
+     "wall": "f13",
+     "type": "door",
+     "at": 3.55,
+     "w": 1.0
+    },
+    {
+     "wall": "f15",
+     "type": "door",
+     "at": 1.17,
+     "w": 0.8
+    },
+    {
+     "wall": "f18",
+     "type": "window",
+     "at": 2.1,
+     "w": 2.7,
+     "sill": 0.9,
+     "h": 1.2
+    }
+   ],
+   "rooms": [
+    {
+     "name": "Bath 2",
+     "poly": [
+      [
+       1.46,
+       3.34
+      ],
+      [
+       3.0,
+       3.34
+      ],
+      [
+       3.0,
+       5.91
+      ],
+      [
+       1.46,
+       5.91
+      ]
+     ]
+    },
+    {
+     "name": "Bedroom 2",
+     "poly": [
+      [
+       3.0,
+       3.98
+      ],
+      [
+       7.315,
+       3.98
+      ],
+      [
+       7.315,
+       7.15
+      ],
+      [
+       3.0,
+       7.15
+      ]
+     ]
+    },
+    {
+     "name": "Bedroom 3",
+     "poly": [
+      [
+       0,
+       5.0
+      ],
+      [
+       1.46,
+       5.0
+      ],
+      [
+       1.46,
+       5.91
+      ],
+      [
+       3.0,
+       5.91
+      ],
+      [
+       3.0,
+       9.65
+      ],
+      [
+       0,
+       9.65
+      ]
+     ]
+    },
+    {
+     "name": "Landing",
+     "poly": [
+      [
+       3.0,
+       7.15
+      ],
+      [
+       4.1,
+       7.15
+      ],
+      [
+       4.1,
+       9.65
+      ],
+      [
+       3.0,
+       9.65
+      ]
+     ]
+    },
+    {
+     "name": "Stair",
+     "poly": [
+      [
+       4.1,
+       7.15
+      ],
+      [
+       7.315,
+       7.15
+      ],
+      [
+       7.315,
+       9.65
+      ],
+      [
+       4.1,
+       9.65
+      ]
+     ]
+    },
+    {
+     "name": "Master bedroom",
+     "poly": [
+      [
+       0,
+       9.65
+      ],
+      [
+       7.315,
+       9.65
+      ],
+      [
+       7.315,
+       14.39
+      ],
+      [
+       3.0,
+       14.39
+      ],
+      [
+       3.0,
+       12.2
+      ],
+      [
+       0,
+       12.2
+      ]
+     ]
+    },
+    {
+     "name": "Bath 1",
+     "poly": [
+      [
+       1.23,
+       12.2
+      ],
+      [
+       3.0,
+       12.2
+      ],
+      [
+       3.0,
+       15.1
+      ],
+      [
+       1.23,
+       15.1
+      ]
+     ]
+    },
+    {
+     "name": "A/C ledge",
+     "poly": [
+      [
+       0,
+       12.2
+      ],
+      [
+       1.23,
+       12.2
+      ],
+      [
+       1.23,
+       15.1
+      ],
+      [
+       0,
+       15.1
+      ]
+     ]
+    },
+    {
+     "name": "RC flat roof",
+     "poly": [
+      [
+       3.0,
+       14.39
+      ],
+      [
+       7.315,
+       14.39
+      ],
+      [
+       7.315,
+       16.5
+      ],
+      [
+       0,
+       16.5
+      ],
+      [
+       0,
+       15.1
+      ],
+      [
+       3.0,
+       15.1
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

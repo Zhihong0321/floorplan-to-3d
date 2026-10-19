@@ -1,0 +1,20 @@
+# secrets
+.env
+.claude/settings.local.json
+
+# python / os noise
+__pycache__/
+*.pyc
+.DS_Store
+
+# third-party brochures / plans downloaded for reading: not ours to redistribute.
+# each project's 1_floorplan/source.json keeps the URLs, re-download with pipeline/lane1_floorplan/fetch.py
+projects/*/1_floorplan/source/
+projects/*/1_floorplan/candidates.json
+
+# regenerable outputs (rebuild with: python3 pipeline/run.py run <slug>)
+projects/*/1_floorplan/plan_check_*.png
+projects/*/2_model/
+projects/*/3_pv/pv.json
+projects/*/3_pv/viewer.html
+projects/*/3_pv/cable_schedule.csv

@@ -1,0 +1,72 @@
+{
+ "schema": "pv_plan/1",
+ "panel": {
+  "w": 1.134,
+  "h": 2.278,
+  "watt": 550,
+  "vmp": 41.7,
+  "imp": 13.2
+ },
+ "gap": 0.02,
+ "setback": 0.4,
+ "arrays": [
+  {
+   "id": "A1",
+   "face": "S",
+   "rows": 2,
+   "cols": 5,
+   "orientation": "portrait",
+   "panels_per_string": 5
+  }
+ ],
+ "equipment": [
+  {
+   "id": "inverter",
+   "kind": "inverter",
+   "label": "Inverter 5 kW",
+   "pos": [
+    6.3,
+    17.6
+   ],
+   "level": 0,
+   "height": 1.5,
+   "kw": 5,
+   "phases": 1,
+   "ac_v": 230
+  },
+  {
+   "id": "db",
+   "kind": "db",
+   "label": "DB",
+   "pos": [
+    6.4,
+    0.6
+   ],
+   "level": 0,
+   "height": 1.5
+  }
+ ],
+ "cables": [
+  {
+   "id": "DC1",
+   "type": "dc",
+   "from": "A1",
+   "to": "inverter",
+   "size_mm2": 4,
+   "strings": 2
+  },
+  {
+   "id": "AC1",
+   "type": "ac",
+   "from": "inverter",
+   "to": "db",
+   "size_mm2": 6,
+   "via": [
+    [
+     6.3,
+     9
+    ]
+   ]
+  }
+ ]
+}

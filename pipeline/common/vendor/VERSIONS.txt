@@ -1,0 +1,3 @@
+three.js r147 (MIT), classic builds from jsdelivr npm three@0.147.0:
+  build/three.min.js, examples/js/controls/OrbitControls.js, examples/js/exporters/GLTFExporter.js
+Why r147: last release with classic (non-module) example scripts, so viewer.html works offline from file://.

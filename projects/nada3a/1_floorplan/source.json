@@ -1,0 +1,24 @@
+{
+ "schema": "source/1",
+ "project": "Nada 3A @ Nada Alam (Seri Pajam Home)",
+ "declared_dims": {
+  "width_m": 6.706,
+  "depth_m": 21.336,
+  "note": "22ft x 70ft unit, printed on plan as 6706 x 21336 mm"
+ },
+ "sources": [
+  {
+   "url": "https://issuu.com/seripajam/docs/nada3a_leaflet",
+   "kind": "issuu-leaflet",
+   "license_note": "marketing leaflet, used privately for prototyping",
+   "files": [
+    "source/source_page_4.jpg",
+    "source/source_page_5.jpg"
+   ],
+   "contents": {
+    "source_page_4.jpg": "ground + first floor plans, dims, specs",
+    "source_page_5.jpg": "building section (heights, roof pitch), artist impression"
+   }
+  }
+ ]
+}

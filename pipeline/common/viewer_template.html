@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>House 3D</title>
+<style>
+  :root { --bg:#f4f5f7; --panel:#ffffff; --ink:#1d2330; --mute:#667085; --line:#e3e6ec; --acc:#2563eb; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg:#14171d; --panel:#1c212b; --ink:#e8ebf2; --mute:#9aa4b5; --line:#2b3240; --acc:#6ea0ff; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--ink);
+    font:13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  #app { display:flex; height:100%; }
+  #side { width:330px; max-width:42vw; background:var(--panel); border-right:1px solid var(--line);
+    overflow:auto; padding:14px; display:flex; flex-direction:column; gap:14px; }
+  #view { flex:1; position:relative; min-width:0; }
+  canvas { display:block; width:100%; height:100%; }
+  h1 { font-size:15px; margin:0; }
+  h2 { font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--mute); margin:0 0 6px; }
+  .sub { color:var(--mute); font-size:12px; }
+  label { display:flex; align-items:center; gap:6px; padding:2px 0; cursor:pointer; }
+  .row { display:flex; flex-wrap:wrap; gap:6px; }
+  button { background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:6px;
+    padding:5px 10px; cursor:pointer; font:inherit; }
+  button:hover { border-color:var(--acc); }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  th, td { text-align:left; padding:4px 5px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th { color:var(--mute); font-weight:600; }
+  tr.cab { cursor:pointer; } tr.cab:hover, tr.sel { background:var(--bg); }
+  .ok { color:#15803d; } .bad { color:#b91c1c; font-weight:600; }
+  .warn { background:#fff4d6; color:#7a4b00; border:1px solid #f0d58a; border-radius:6px; padding:6px 8px; font-size:12px; }
+  .sw { width:10px; height:10px; border-radius:2px; display:inline-block; }
+  input[type=range] { width:100%; }
+  @media (max-width:700px) { #app { flex-direction:column-reverse; } #side { width:100%; max-width:none; height:42%; border-right:0; border-top:1px solid var(--line); } }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="side">
+    <div><h1 id="title"></h1><div class="sub" id="summary"></div></div>
+    <div id="warns"></div>
+    <div><h2>Levels</h2><div id="levels"></div></div>
+    <div><h2>Layers</h2><div id="layers"></div>
+      <div style="margin-top:6px"><span class="sub">Roof opacity</span><input id="roofop" type="range" min="0" max="1" step="0.05" value="0.55"></div>
+      <div style="margin-top:6px"><span class="sub">Wall opacity</span><input id="wallop" type="range" min="0.05" max="1" step="0.05" value="1"></div></div>
+    <div><h2>Camera</h2><div class="row">
+      <button data-v="iso">Iso</button><button data-v="top">Top</button>
+      <button data-v="S">South</button><button data-v="N">North</button><button data-v="E">East</button><button data-v="W">West</button>
+    </div></div>
+    <div id="pvbox"><h2>PV arrays</h2><div id="arrays"></div></div>
+    <div id="cabbox"><h2>Cable schedule <span class="sub">(click a row)</span></h2><div id="cables"></div>
+      <div class="sub" style="margin-top:6px">Lengths are routed lengths + slack + terminations. Voltage drop at 90&deg;C copper. Ampacity, grouping and local-code checks are NOT done &mdash; a licensed installer must verify.</div></div>
+    <div><h2>Export</h2><div class="row"><button id="glb">Download GLB</button></div></div>
+  </div>
+  <div id="view"></div>
+</div>
+
+<script>/*__THREE__*/</script>
+<script>/*__ORBIT__*/</script>
+<script>/*__GLTF__*/</script>
+<script>
+const M = /*__MODEL__*/;
+const LAYER_NAMES = {floors:"Floors", walls:"Walls", roof:"Roof", pv:"PV panels", equip:"Equipment", cables:"Cables", labels:"Room labels"};
+const CABLE_COL = {dc:0xf97316, ac:0x2563eb, earth:0x16a34a, comms:0x8b5cf6};
+const EQUIP = {inverter:{c:0xf59e0b,s:[.55,.4,.22]}, db:{c:0x64748b,s:[.4,.5,.15]}, meter:{c:0x94a3b8,s:[.25,.3,.12]}, battery:{c:0x10b981,s:[.6,.8,.25]}, generic:{c:0x9ca3af,s:[.3,.3,.2]}};
+
+const view = document.getElementById("view");
+const renderer = new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+view.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(getComputedStyle(document.body).backgroundColor);
+const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 500);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+const sun = new THREE.DirectionalLight(0xffffff, 0.7); sun.position.set(-8, 20, 12); scene.add(sun);
+
+const fp = M.footprint, cx = (fp[0]+fp[2])/2, cz = (fp[1]+fp[3])/2;
+const size = Math.max(fp[2]-fp[0], fp[3]-fp[1]);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(size*4, size*4), new THREE.MeshBasicMaterial({color:0xdfe3e8}));
+ground.rotation.x = -Math.PI/2; ground.position.set(cx, -0.02, cz); scene.add(ground);
+const grid = new THREE.GridHelper(size*4, Math.round(size*4), 0xb8bec9, 0xcfd4dc); grid.position.set(cx, -0.015, cz); scene.add(grid);
+
+const layerObjs = {floors:[], walls:[], roof:[], pv:[], equip:[], cables:[], labels:[]};
+const tag = (o, layer, level) => { o.userData = {layer, level: level ?? null}; layerObjs[layer].push(o); scene.add(o); return o; };
+
+// triangle-soup groups from build.py
+let roofMat = null; const wallMats = [];
+M.groups.forEach(g => {
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(g.positions, 3));
+  geo.computeVertexNormals();
+  const mat = new THREE.MeshLambertMaterial({color:g.color, side:THREE.DoubleSide, transparent:g.opacity<1, opacity:g.opacity,
+    polygonOffset:true, polygonOffsetFactor:1, polygonOffsetUnits:1});
+  if (g.name === "roof") roofMat = mat;
+  if (g.name.startsWith("wall_")) wallMats.push(mat);
+  const mesh = tag(new THREE.Mesh(geo, mat), g.layer, g.level);
+  if (g.name === "pv") {
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo, 5), new THREE.LineBasicMaterial({color:0xcbd5e1}));
+    tag(edges, "pv", null);
+  }
+});
+
+// floors + room labels
+function label(text, h) {
+  const c = document.createElement("canvas"); c.width = 512; c.height = 128;
+  const x = c.getContext("2d"); x.font = "bold 44px sans-serif"; x.textAlign = "center"; x.textBaseline = "middle";
+  x.lineWidth = 8; x.strokeStyle = "rgba(255,255,255,.95)"; x.strokeText(text, 256, 64); x.fillStyle = "#1d2330"; x.fillText(text, 256, 64);
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c), depthTest:false, transparent:true}));
+  sp.scale.set(h*4, h, 1); sp.renderOrder = 10; return sp;
+}
+const pal = [0xece5d3, 0xe3ebdd, 0xdfe7ee, 0xf0e1dc, 0xe8e0ee, 0xeee9d0];
+M.levels.forEach((lv, li) => {
+  lv.rooms.forEach((r, i) => {
+    const sh = new THREE.Shape(r.poly.map(p => new THREE.Vector2(p[0], p[1])));
+    const g = new THREE.ShapeGeometry(sh); g.rotateX(Math.PI/2);
+    const m = new THREE.Mesh(g, new THREE.MeshLambertMaterial({color:pal[i % pal.length], side:THREE.DoubleSide}));
+    m.position.y = lv.elevation + 0.02; tag(m, "floors", li);
+    const px = r.poly.reduce((s,p)=>s+p[0],0)/r.poly.length, pz = r.poly.reduce((s,p)=>s+p[1],0)/r.poly.length;
+    const sp = label(r.name, 0.5); sp.position.set(px, lv.elevation + 0.5, pz); tag(sp, "labels", li);
+  });
+});
+
+// equipment
+M.equipment.forEach(e => {
+  const d = EQUIP[e.kind] || EQUIP.generic;
+  const b = new THREE.Mesh(new THREE.BoxGeometry(...d.s), new THREE.MeshLambertMaterial({color:d.c}));
+  b.position.set(...e.p3); tag(b, "equip", null);
+  const sp = label(e.label, 0.28); sp.position.set(e.p3[0], e.p3[1] + 0.55, e.p3[2]); tag(sp, "equip", null);
+});
+
+// cables as cylinders
+const cabGroups = {}, cabMats = {};
+M.paths.forEach(p => {
+  const grp = new THREE.Group(); cabGroups[p.id] = grp;
+  const col = CABLE_COL[p.type] || 0x444444;
+  const mat = new THREE.MeshLambertMaterial({color:col, transparent:true});
+  cabMats[p.id] = mat;
+  for (let i = 0; i < p.path.length - 1; i++) {
+    const a = new THREE.Vector3(...p.path[i]), b = new THREE.Vector3(...p.path[i+1]);
+    const len = a.distanceTo(b); if (len < 1e-4) continue;
+    const cyl = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, len, 8), mat);
+    cyl.position.copy(a).add(b).multiplyScalar(0.5);
+    cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), b.clone().sub(a).normalize());
+    grp.add(cyl);
+    const j = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 6), mat); j.position.copy(b); grp.add(j);
+  }
+  grp.renderOrder = 5; tag(grp, "cables", null);
+});
+
+// ---- UI ----
+document.title = M.name + " - 3D";
+document.getElementById("title").textContent = M.name;
+document.getElementById("summary").textContent =
+  M.levels.length + " level(s) · top " + M.eave_h.toFixed(1) + " m" +
+  (M.pv.panels ? " · PV " + M.pv.panels + " panels / " + M.pv.kwp + " kWp" : "");
+document.getElementById("warns").innerHTML = M.warnings.map(w => '<div class="warn">' + w + '</div>').join("");
+
+const layerOn = {}, levelOn = {};
+function applyVis() {
+  Object.entries(layerObjs).forEach(([layer, arr]) => arr.forEach(o => {
+    const lv = o.userData.level;
+    o.visible = layerOn[layer] && (lv === null || levelOn[lv]);
+  }));
+}
+const lvBox = document.getElementById("levels");
+M.levels.forEach((lv, i) => {
+  levelOn[i] = true;
+  const l = document.createElement("label"); l.innerHTML = '<input type="checkbox" checked> ' + lv.name + ' <span class="sub">(+' + lv.elevation.toFixed(1) + ' m)</span>';
+  l.firstChild.onchange = e => { levelOn[i] = e.target.checked; applyVis(); }; lvBox.appendChild(l);
+});
+const lyBox = document.getElementById("layers");
+Object.keys(layerObjs).forEach(k => {
+  layerOn[k] = true;
+  if (!layerObjs[k].length) return;   // building-only models have no roof / PV / cables: don't list empty layers
+  const l = document.createElement("label"); l.innerHTML = '<input type="checkbox" checked> ' + LAYER_NAMES[k];
+  l.firstChild.onchange = e => { layerOn[k] = e.target.checked; applyVis(); }; lyBox.appendChild(l);
+});
+if (!roofMat) document.getElementById("roofop").parentElement.style.display = "none";
+document.getElementById("roofop").oninput = e => { if (roofMat) { roofMat.opacity = +e.target.value; roofMat.transparent = roofMat.opacity < 1; roofMat.needsUpdate = true; } };
+
+document.getElementById("wallop").oninput = e => wallMats.forEach(m => { m.opacity = +e.target.value; m.transparent = m.opacity < 1; m.depthWrite = m.opacity >= 1; m.needsUpdate = true; });
+
+// camera
+const diag = Math.hypot(fp[2]-fp[0], fp[3]-fp[1]) + M.eave_h;
+const target = new THREE.Vector3(cx, M.eave_h/2, cz);
+function setView(v) {
+  const r = diag * 1.1, t = target;
+  const P = {iso:[ .8, .9, 1.1], top:[0, 1.05, 0.001], S:[0,.25,1.6], N:[0,.25,-1.6], E:[1.6,.25,0], W:[-1.6,.25,0]}[v];
+  camera.position.set(t.x + P[0]*r, t.y + P[1]*r, t.z + P[2]*r);
+  controls.target.copy(t); controls.update();
+}
+document.querySelectorAll("[data-v]").forEach(b => b.onclick = () => setView(b.dataset.v));
+
+// PV + cable tables
+const compass = az => ["N","NE","E","SE","S","SW","W","NW"][Math.round(az/45)%8];
+document.getElementById("arrays").innerHTML = M.arrays.length ? '<table><tr><th>ID</th><th>Panels</th><th>kWp</th><th>Facing</th><th>Tilt</th><th>Strings</th></tr>' +
+  M.arrays.map(a => '<tr><td>'+a.id+'</td><td>'+a.panels+' ('+a.rows+'×'+a.cols+')</td><td>'+a.kwp+'</td><td>'+compass(a.azimuth_true)+' '+a.azimuth_true+'°</td><td>'+a.tilt+'°</td><td>'+a.strings+'×'+a.panels_per_string+' · '+a.v_string+' V</td></tr>').join("") + '</table>'
+  : '<div class="sub">No arrays defined.</div>';
+const cb = document.getElementById("cables");
+if (M.cables.length) {
+  cb.innerHTML = '<table><tr><th></th><th>ID</th><th>Route m</th><th>Cut m</th><th>mm²</th><th>Drop %</th><th>Sugg.</th></tr>' + M.cables.map(c =>
+    '<tr class="cab" data-id="'+c.id+'"><td><span class="sw" style="background:#'+(CABLE_COL[c.type]||0x444444).toString(16).padStart(6,"0")+'"></span></td><td>'+c.id+'<div class="sub">'+c.from+' → '+c.to+'</div></td><td>'+c.route_m+'</td><td>'+c.cut_length_m+'</td><td>'+(c.size_mm2??"–")+'</td><td class="'+(c.status==="OK"?"ok":(c.status==="n/a"?"":"bad"))+'">'+(c.vdrop_pct??"–")+'</td><td>'+(c.suggested_mm2??"–")+'</td></tr>').join("") + '</table>';
+  cb.querySelectorAll("tr.cab").forEach(tr => tr.onclick = () => {
+    const was = tr.classList.contains("sel");
+    cb.querySelectorAll("tr.cab").forEach(x => x.classList.remove("sel"));
+    Object.entries(cabGroups).forEach(([id, g]) => {
+      const on = !was && id === tr.dataset.id;
+      g.scale.set(1,1,1); g.children.forEach(m => m.scale.set(on?2.2:1, 1, on?2.2:1));
+      cabMats[id].opacity = was ? 1 : (on ? 1 : 0.25);
+    });
+    if (!was) tr.classList.add("sel");
+  });
+} else cb.innerHTML = '<div class="sub">No cables defined.</div>';
+document.getElementById("pvbox").style.display = M.arrays.length ? "" : "none";
+
+document.getElementById("glb").onclick = () => {
+  const keep = [ground, grid]; keep.forEach(o => o.visible = false);
+  new THREE.GLTFExporter().parse(scene, res => {
+    keep.forEach(o => o.visible = true);
+    const blob = new Blob([res], {type:"application/octet-stream"});
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = M.name + ".glb"; a.click();
+  }, err => { keep.forEach(o => o.visible = true); alert("GLB export failed: " + err); }, {binary:true});
+};
+
+function resize() { const w = view.clientWidth, h = view.clientHeight; renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix(); }
+addEventListener("resize", resize); resize(); applyVis(); setView("iso");
+(function loop() { requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); })();
+</script>
+</body>
+</html>

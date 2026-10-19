@@ -1,0 +1,34 @@
+{
+ "schema": "source/1",
+ "sources": [
+  {
+   "url": "https://daiman.com.my/wp-content/uploads/2025/05/Lumina-Web-Brochure-Compressed.pdf",
+   "kind": "pdf",
+   "files": [
+    "source/lumina-web-brochure-compressed.pdf",
+    "source/lumina-web-brochure-compressed-1.png",
+    "source/lumina-web-brochure-compressed-2.png",
+    "source/lumina-web-brochure-compressed-3.png",
+    "source/lumina-web-brochure-compressed-4.png",
+    "source/lumina-web-brochure-compressed-5.png",
+    "source/lumina-web-brochure-compressed-6.png",
+    "source/lumina-web-brochure-compressed-7.png",
+    "source/lumina-web-brochure-compressed-8.png"
+   ],
+   "note": "Daiman Development official e-brochure, Precinct Lumina, Taman Daiman Jaya, Kota Tinggi",
+   "fetched_at": "2026-10-19T12:40:38"
+  }
+ ],
+ "project": "Precinct Lumina, Taman Daiman Jaya, Kota Tinggi, Johor (Daiman Development Berhad) - Type A",
+ "declared_dims": {
+  "width_m": 7.315,
+  "depth_m": 21.336,
+  "note": "plan prints 7315 mm per unit and 21336 mm total (1200 + 12000 + 8136 on the end unit)"
+ },
+ "file_notes": {
+  "lumina-web-brochure-compressed.pdf": "official e-brochure, 8 pages, raster 2481x1754 per spread",
+  "lumina-web-brochure-compressed-5.png": "Type A plans + specifications + render (USED)",
+  "lumina-web-brochure-compressed-4.png": "site plan with compass",
+  "user-pasted": "the same Type A page was also pasted by the user in chat (image only exists in the conversation)"
+ }
+}
